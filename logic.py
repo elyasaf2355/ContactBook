@@ -72,6 +72,7 @@ def add_contact(l):
         print("=" * 20)
         phon = input("Enter phon number: ")
         l.append({"name": name, "phon": phon})
+        l.sort(key = lambda x: x["name"])
         save_list(l)
     else:
         print("Contact already exist!")
