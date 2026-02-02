@@ -1,12 +1,13 @@
 import os
 import json
-
+list_name = ""
 def load_list():
     print("====Contact Book====")
     lists = os.listdir('./contact_lists')
     for i in range(0, len(lists)):
         print(f"{i + 1}. {os.path.splitext(lists[i])[0]}")
     print("-" * 8)
+    global list_name
     list_name = input("Choose book name,\nor enter new name to create one more: ")
     if list_name + '.json' in lists:
         with open(f'./contact_lists/{list_name}.json') as f:
@@ -16,8 +17,8 @@ def load_list():
         json.dump([], f)
     return []
 
-def main_menu():
-    print("\n" * 100)
+def main_menu(l):
+    clear()
     user_choice = input(f"""
 ====Contact Book====
 1. Add new contact
@@ -32,32 +33,88 @@ CHOOSE OPTION:
 
     match user_choice:
         case '1':
-            add_contact()
+            add_contact(l)
         case '2':
-            find_contact()
+            find_contact(l)
         case '3':
-            show_list()
+            show_list(l)
         case '4':
-            delete_contact()
+            delete_contact(l)
         case '5':
-            edit_contact()
+            edit_contact(l)
         case '6':
             exit()
         case _:
-            main_menu()
+            main_menu(l)
 
-def save_list():
-    pass
-def add_contact():
-    pass
-def show_list():
-    pass
-def find_contact():
-    pass
-def delete_contact():
-    pass
-def edit_contact():
+#help methods
+def clear():
+    print('\n' * 100)
+def save_list(l):
+    with open(f'./contact_lists/{list_name}.json', 'w') as f:
+        json.dump(l, f)
+def find(l, name):
+    for x in l:
+        if x["name"] == name:
+            return x
+    return None
+
+#
+
+def add_contact(l):
+    clear()
+    print("-" * 8)
+    name = input("Enter name: ")
+    print("-" * 8)
+    phon = input("Enter phon number: ")
+    l.append({"name": name, "phon": phon})
+    save_list(l)
+    main_menu(l)
+def show_list(l):
+    clear()
+    print("=" * 20)
+    for i in range(len(l)):
+        print(f"{i + 1}. {l[i]["name"]} - {l[i]["phon"]}")
+        print("=" * 20)
+    if not l:
+        print("List is empty!")
+        print("=" * 20)
+    input("Press ENTER to continue")
+    main_menu(l)
+def find_contact(l):
+    clear()
+    print("=" * 8)
+    name = input("Enter name to search: ")
+    x = find(l, name)
+    if x:
+        print("-" * 8)
+        print(f"{x["name"]} - {x["phon"]}")
+        print("-" * 8)
+        input("Press ENTER to continue")
+        main_menu(l)
+    else:
+        print("Contact name was not found!")
+        input("Press ENTER to continue")
+        main_menu(l)
+
+def delete_contact(l):
+    clear()
+    print("=" * 8)
+    name = input("Enter name contact to delete: ")
+    x = find(l, name)
+    if x:
+        l.remove(x)
+        print("-" * 8)
+        print("Contact removed!")
+        input("Press ENTER to continue")
+        main_menu(l)
+    else:
+        print("-" * 8)
+        print("Contact name was not found!")
+        input("Press ENTER to continue")
+        main_menu(l)
+
+
+def edit_contact(l):
     pass
 
-load_list()
-main_menu()

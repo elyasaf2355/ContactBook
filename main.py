@@ -1,2 +1,5 @@
+from logic import *
 def main():
-    while True:
+    contact_list = load_list()
+    main_menu(contact_list)
+main()
