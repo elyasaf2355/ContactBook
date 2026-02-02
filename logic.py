@@ -1,5 +1,7 @@
 import os
 import json
+from os.path import exists
+
 list_name = ""
 def load_list():
     print("====Contact Book====")
@@ -63,12 +65,17 @@ def find(l, name):
 
 def add_contact(l):
     clear()
-    print("-" * 8)
+    print("=" * 20)
     name = input("Enter name: ")
-    print("-" * 8)
-    phon = input("Enter phon number: ")
-    l.append({"name": name, "phon": phon})
-    save_list(l)
+    exist = find(l, name)
+    if not exist:
+        print("=" * 20)
+        phon = input("Enter phon number: ")
+        l.append({"name": name, "phon": phon})
+        save_list(l)
+    else:
+        print("Contact already exist!")
+        input("Press ENTER to continue")
     main_menu(l)
 def show_list(l):
     clear()
@@ -109,12 +116,31 @@ def delete_contact(l):
         input("Press ENTER to continue")
         main_menu(l)
     else:
-        print("-" * 8)
+        print("=" * 20)
         print("Contact name was not found!")
+        print("=" * 20)
         input("Press ENTER to continue")
         main_menu(l)
 
-
 def edit_contact(l):
-    pass
+    clear()
+    print("=" * 8)
+    name = input("Enter name contact to edit: ")
+    x = find(l, name)
+    if x:
+        print("=" * 20)
+        new_name = input("name: (Press enter to save old name) ")
+        print("=" * 20)
+        new_number = input("phon number: (Press enter to save old number) ")
+        if new_name: x["name"] = new_name
+        if new_number: x["phon"] = new_number
+        save_list(l)
+        input("Updated! Press ENTER to continue")
+        main_menu(l)
+    else:
+        print("=" * 20)
+        print("Contact name was not found!")
+        print("=" * 20)
+        input("Press ENTER to continue")
+        main_menu(l)
 
